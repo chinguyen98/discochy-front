@@ -1,8 +1,19 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import RegisterScreen from './screens/RegisterScreen/RegisterScreen';
+
+const router = createBrowserRouter([
+  { path: '/', element: <div>Hello World!</div> },
+  {
+    path: '/register',
+    element: <RegisterScreen />
+  }
+]);
+
 function App() {
   return (
-    <div className="App">
-      <div>Hello World!!!</div>
-    </div>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 }
 
