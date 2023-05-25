@@ -1,5 +1,5 @@
 const LoginScreen = () => {
-  return <>LoginScreen</>;
+  return <div>LoginScreen</div>;
 };
 
 export default LoginScreen;
