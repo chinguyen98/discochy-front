@@ -1,5 +1,6 @@
 import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
 import { Dayjs } from 'dayjs';
+import { signupApi } from '~/apis/auth.api';
 
 const formItemLayout = {
   labelCol: {
@@ -26,15 +27,16 @@ const tailFormItemLayout = {
 };
 
 const RegisterScreen = () => {
-  const onFinish = (values: {
+  const onFinish = async (values: {
     email: string;
     username: string;
     password: string;
     phone_number: string;
     date_of_birth: Dayjs;
   }) => {
-    const formData = { ...values, date_of_birth: values.date_of_birth.format('DD-MM-YYYY') };
-    console.log({ formData });
+    const data = { ...values, date_of_birth: values.date_of_birth.format('DD-MM-YYYY') };
+    const res = await signupApi({ data });
+    console.log({ res });
   };
 
   const onFinishFailed = (errorInfo: any) => {
