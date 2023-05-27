@@ -1,5 +1,6 @@
-import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row, Spin } from 'antd';
 import { Dayjs } from 'dayjs';
+import { useState } from 'react';
 import { signupApi } from '~/apis/auth.api';
 
 const formItemLayout = {
@@ -27,6 +28,8 @@ const tailFormItemLayout = {
 };
 
 const RegisterScreen = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const onFinish = async (values: {
     email: string;
     username: string;
@@ -34,9 +37,15 @@ const RegisterScreen = () => {
     phone_number: string;
     date_of_birth: Dayjs;
   }) => {
-    const data = { ...values, date_of_birth: values.date_of_birth.format('DD-MM-YYYY') };
-    const res = await signupApi({ data });
-    console.log({ res });
+    try {
+      setIsLoading(true);
+      const data = { ...values, date_of_birth: values.date_of_birth.format('DD-MM-YYYY') };
+      const res = await signupApi({ data });
+      console.log({ res });
+    } catch (err) {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -44,97 +53,99 @@ const RegisterScreen = () => {
   };
 
   return (
-    <Row>
-      <Col className="mb-5 flex justify-center text-lg text-red-500" xs={24}>
-        Register Form
-      </Col>
-      <Col xs={24}>
-        <Row className="flex justify-center">
-          <Col xs={12}>
-            <Form {...formItemLayout} onFinish={onFinish} onFinishFailed={onFinishFailed}>
-              <Form.Item
-                name="email"
-                label="E-mail"
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please input your E-mail!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name="password"
-                label="Password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item
-                name="confirm"
-                label="Confirm Password"
-                dependencies={['password']}
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(new Error('The two passwords that you entered do not match!'));
+    <Spin spinning={isLoading}>
+      <Row>
+        <Col className="mb-5 flex justify-center text-lg text-red-500" xs={24}>
+          Register Form
+        </Col>
+        <Col xs={24}>
+          <Row className="flex justify-center">
+            <Col xs={12}>
+              <Form {...formItemLayout} onFinish={onFinish} onFinishFailed={onFinishFailed}>
+                <Form.Item
+                  name="email"
+                  label="E-mail"
+                  rules={[
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
                     },
-                  }),
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item
-                name="username"
-                label="Username"
-                tooltip="Ur username!"
-                rules={[{ required: true, message: 'Please input your username!', whitespace: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name="phone_number"
-                label="Phone Number"
-                rules={[{ required: true, message: 'Please input your phone number!' }]}
-              >
-                <Input style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item
-                name="date_of_birth"
-                label="DatePicker"
-                rules={[{ required: true, message: 'Please choosae your date of birth!' }]}
-              >
-                <DatePicker />
-              </Form.Item>
-              <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit">
-                  Register
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-      </Col>
-    </Row>
+                    {
+                      required: true,
+                      message: 'Please input your E-mail!',
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  label="Password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your password!',
+                    },
+                  ]}
+                  hasFeedback
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  name="confirm"
+                  label="Confirm Password"
+                  dependencies={['password']}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please confirm your password!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  name="username"
+                  label="Username"
+                  tooltip="Ur username!"
+                  rules={[{ required: true, message: 'Please input your username!', whitespace: true }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="phone_number"
+                  label="Phone Number"
+                  rules={[{ required: true, message: 'Please input your phone number!' }]}
+                >
+                  <Input style={{ width: '100%' }} />
+                </Form.Item>
+                <Form.Item
+                  name="date_of_birth"
+                  label="DatePicker"
+                  rules={[{ required: true, message: 'Please choosae your date of birth!' }]}
+                >
+                  <DatePicker />
+                </Form.Item>
+                <Form.Item {...tailFormItemLayout}>
+                  <Button type="primary" htmlType="submit">
+                    Register
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Spin>
   );
 };
 
