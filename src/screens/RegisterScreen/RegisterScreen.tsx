@@ -2,6 +2,7 @@ import { Button, Col, DatePicker, Form, Input, Row, Spin } from 'antd';
 import { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { signupApi } from '~/apis/auth.api';
+import { showNotification } from '~/shared/notifications';
 
 const formItemLayout = {
   labelCol: {
@@ -43,6 +44,7 @@ const RegisterScreen = () => {
       const res = await signupApi({ data });
       console.log({ res });
     } catch (err) {
+      showNotification({ type: 'error', description: err as string });
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +57,7 @@ const RegisterScreen = () => {
   return (
     <Spin spinning={isLoading}>
       <Row>
-        <Col className="mb-5 flex justify-center text-lg text-red-500" xs={24}>
+        <Col className="mb-5 flex justify-center text-3xl text-red-500" xs={24}>
           Register Form
         </Col>
         <Col xs={24}>

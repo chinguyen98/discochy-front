@@ -34,19 +34,12 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
+    if (response.data.errorCode === 1) {
+      return Promise.reject(response.data.message);
+    }
     return response;
   },
   (error) => {
-    // if (!error.response) {
-    //   console.error('Please check your internet connection.');
-    //   return {
-    //     data: {
-    //       error: 400,
-    //       status: 0,
-    //       message: 'Please check your internet connection.',
-    //     },
-    //   };
-    // }
     return Promise.reject(error);
   },
 );
@@ -67,16 +60,15 @@ const clean = (obj: any) => {
 const axiosHandling = <R = any>(options: AxiosCustomConfigOptions): Promise<R> => {
   const data = clean(options.data);
   const params = clean(options.params);
-  const promise: any = new Promise((resolve, _) => {
+  const promise: any = new Promise((resolve, reject) => {
     instance({
       ...options,
       data,
       params,
     })
       .then((response: Pick<AxiosResponse<R>, 'data'>) => resolve(response.data))
-      .catch((error) => {
-        // reject(error)
-        throw error;
+      .catch((err) => {
+        reject(err);
       });
   });
   return promise;
@@ -100,11 +92,7 @@ export const multipart = <R = any>(url: string, form_data: any, processingCallba
           }
         },
       })
-      .then((response) => resolve(response.data))
-      .catch((error) => {
-        // reject(error)
-        throw error;
-      });
+      .then((response) => resolve(response.data));
   });
   return promise;
 };

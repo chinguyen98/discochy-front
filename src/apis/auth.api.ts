@@ -21,12 +21,13 @@ export type SignupApiResData = {
 
 export type SignupApiRes = BaseResponse<SignupApiResData>;
 
-export const signupApi = (req: SignupApiReq) =>
-  axios<SignupApiRes>({
+export const signupApi = (req: SignupApiReq) => {
+  return axios<SignupApiRes>({
     url: `${prefix}/sign-up`,
     method: 'POST',
     data: req.data,
     signal: req.signal,
   });
+};
 
 /* Signup api  */
