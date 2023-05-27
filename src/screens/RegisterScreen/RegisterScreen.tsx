@@ -1,7 +1,6 @@
 import { Button, Col, DatePicker, Form, Input, Row, Spin } from 'antd';
 import { Dayjs } from 'dayjs';
-import { useState } from 'react';
-import { signupApi } from '~/apis/auth.api';
+import { useSignupApiMutation } from '~/queries/apis/authApi.query';
 import { showNotification } from '~/shared/notifications';
 
 const formItemLayout = {
@@ -29,7 +28,7 @@ const tailFormItemLayout = {
 };
 
 const RegisterScreen = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, mutate } = useSignupApiMutation();
 
   const onFinish = async (values: {
     email: string;
@@ -38,16 +37,15 @@ const RegisterScreen = () => {
     phone_number: string;
     date_of_birth: Dayjs;
   }) => {
-    try {
-      setIsLoading(true);
-      const data = { ...values, date_of_birth: values.date_of_birth.format('DD-MM-YYYY') };
-      const res = await signupApi({ data });
-      console.log({ res });
-    } catch (err) {
-      showNotification({ type: 'error', description: err as string });
-    } finally {
-      setIsLoading(false);
-    }
+    const data = { ...values, date_of_birth: values.date_of_birth.format('DD-MM-YYYY') };
+    mutate(
+      { data },
+      {
+        onError: (err) => {
+          showNotification({ type: 'error', description: err as string });
+        },
+      },
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {
