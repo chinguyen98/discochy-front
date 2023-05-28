@@ -1,7 +1,9 @@
 import { Button, Col, DatePicker, Form, Input, Row, Spin } from 'antd';
 import { Dayjs } from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { useSignupApiMutation } from '~/queries/apis/authApi.query';
 import { showNotification } from '~/shared/notifications';
+import useAuthStore from '~/stores/useAuthStore';
 
 const formItemLayout = {
   labelCol: {
@@ -28,7 +30,11 @@ const tailFormItemLayout = {
 };
 
 const RegisterScreen = () => {
+  const setIsLogged = useAuthStore((state) => state.setIsLogged);
+
   const { isLoading, mutate } = useSignupApiMutation();
+
+  const navigate = useNavigate();
 
   const onFinish = async (values: {
     email: string;
@@ -43,6 +49,11 @@ const RegisterScreen = () => {
       {
         onError: (err) => {
           showNotification({ type: 'error', description: err as string });
+        },
+        onSuccess: (data) => {
+          console.log({ data });
+          setIsLogged(true);
+          navigate('/');
         },
       },
     );

@@ -10,7 +10,7 @@ type AuthStoreState = AuthStoreInitialState & {
 };
 
 const initialState: AuthStoreInitialState = {
-  isLogged: false
+  isLogged: false,
 };
 
 const useAuthStore = create<AuthStoreState>()(
@@ -20,9 +20,9 @@ const useAuthStore = create<AuthStoreState>()(
 
       setIsLogged: (isLogged) => {
         set({ isLogged });
-      }
-    }))
-  )
+      },
+    })),
+  ),
 );
 
 export default useAuthStore;
