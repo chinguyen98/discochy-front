@@ -53,7 +53,7 @@ const RegisterScreen = () => {
         onSuccess: (data) => {
           console.log({ data });
           setIsLogged(true);
-          navigate('/');
+          // navigate('/');
         },
       },
     );
