@@ -1,6 +1,6 @@
 import { Button, Col, DatePicker, Form, Input, Row, Spin } from 'antd';
 import { Dayjs } from 'dayjs';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSignupApiMutation } from '~/queries/apis/authApi.query';
 import { showNotification } from '~/shared/notifications';
 import useAuthStore from '~/stores/useAuthStore';
@@ -31,15 +31,10 @@ const tailFormItemLayout = {
 
 const RegisterScreen = () => {
   const setIsLogged = useAuthStore((state) => state.setIsLogged);
-  const isLogged = useAuthStore((state) => state.isLogged);
 
   const { isLoading, mutate } = useSignupApiMutation();
 
   const navigate = useNavigate();
-
-  if (isLogged) {
-    return <Navigate to="/" />;
-  }
 
   const onFinish = async (values: {
     email: string;

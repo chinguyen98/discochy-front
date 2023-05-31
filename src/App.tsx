@@ -4,20 +4,36 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { IS_PROD } from './configs';
 import { queryClient } from './query-client';
+import Route from './components/Route';
 
 const MainScreen = lazy(() => import('./screens/MainScreen'));
 const LoginScreen = lazy(() => import('./screens/LoginScreen'));
 const RegisterScreen = lazy(() => import('./screens/RegisterScreen'));
 
 const router = createBrowserRouter([
-  { path: '/', element: <MainScreen /> },
+  {
+    path: '/',
+    element: (
+      <Route.Private>
+        <MainScreen />
+      </Route.Private>
+    ),
+  },
   {
     path: '/register',
-    element: <RegisterScreen />,
+    element: (
+      <Route.Auth>
+        <RegisterScreen />
+      </Route.Auth>
+    ),
   },
   {
     path: '/login',
-    element: <LoginScreen />,
+    element: (
+      <Route.Auth>
+        <LoginScreen />
+      </Route.Auth>
+    ),
   },
 ]);
 
