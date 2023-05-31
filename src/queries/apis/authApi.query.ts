@@ -1,11 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import { SignupApiReq, signupApi } from '~/apis/auth.api';
+import { SigninApiReq, SignupApiReq, signinApi, signupApi } from '~/apis/auth.api';
 import { LOCAL_STORAGE_KEY } from '~/shared/constants';
 
 const prefixQueryKey = 'chat';
 
 const authApiQueryKeys = {
   signup: [`${prefixQueryKey}/sign-up`] as const,
+  signin: [`${prefixQueryKey}/sign-in`] as const,
 };
 
 export const useSignupApiMutation = () =>
@@ -18,5 +19,16 @@ export const useSignupApiMutation = () =>
       }
       return res.data;
     },
-    cacheTime: 30000,
+  });
+
+export const useSigninApiMutation = () =>
+  useMutation({
+    mutationKey: authApiQueryKeys.signin,
+    mutationFn: async (data: SigninApiReq) => {
+      const res = await signinApi(data);
+      if (res.data?.accessToken) {
+        localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, res.data.accessToken);
+      }
+      return res.data;
+    },
   });

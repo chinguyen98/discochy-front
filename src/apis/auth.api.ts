@@ -3,7 +3,7 @@ import { BaseRequest, BaseResponse } from '~/types/axios-request';
 
 const prefix = '/auth';
 
-/* Signup api  */
+/* Begin Signup api  */
 
 export type SignupApiReqParams = {
   email: string;
@@ -30,4 +30,30 @@ export const signupApi = (req: SignupApiReq) => {
   });
 };
 
-/* Signup api  */
+/* End Signup api  */
+
+/* Begin Signin api */
+
+export type SigninApiReqParams = {
+  username: string;
+  password: string;
+};
+
+export type SigninApiReq = BaseRequest<SigninApiReqParams>;
+
+export type SigninApiResData = {
+  accessToken: string;
+};
+
+export type SigninApiRes = BaseResponse<SigninApiResData>;
+
+export const signinApi = (req: SigninApiReq) => {
+  return axios<SigninApiRes>({
+    url: `${prefix}/sign-in`,
+    method: 'POST',
+    data: req.data,
+    signal: req.signal,
+  });
+};
+
+/* End Signin api */
