@@ -1,7 +1,6 @@
-import { Button, Col, DatePicker, Form, Input, Row, Spin } from 'antd';
-import { Dayjs } from 'dayjs';
+import { Button, Col, Form, Input, Row, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useSigninApiMutation, useSignupApiMutation } from '~/queries/apis/authApi.query';
+import { useSigninApiMutation } from '~/queries/apis/authApi.query';
 import { showNotification } from '~/shared/notifications';
 import useAuthStore from '~/stores/useAuthStore';
 
@@ -30,8 +29,6 @@ const tailFormItemLayout = {
 };
 
 const LoginScreen = () => {
-  const setIsLogged = useAuthStore((state) => state.setIsLogged);
-
   const { isLoading, mutate } = useSigninApiMutation();
 
   const navigate = useNavigate();
@@ -45,7 +42,6 @@ const LoginScreen = () => {
           showNotification({ type: 'error', description: err as string });
         },
         onSuccess: () => {
-          setIsLogged(true);
           navigate('/');
         },
       },
@@ -90,6 +86,14 @@ const LoginScreen = () => {
                 <Form.Item {...tailFormItemLayout}>
                   <Button type="primary" htmlType="submit">
                     Login
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      navigate('/register');
+                    }}
+                    type="default"
+                  >
+                    Register
                   </Button>
                 </Form.Item>
               </Form>

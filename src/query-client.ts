@@ -8,9 +8,7 @@ export const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: false,
-      enabled: false,
-      cacheTime: 0,
-      staleTime: 0,
+      enabled: true,
     },
   },
 });

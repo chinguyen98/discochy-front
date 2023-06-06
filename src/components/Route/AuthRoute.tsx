@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import useAuthStore from '~/stores/useAuthStore';
+import { useUserProfileQuery } from '~/queries/apis/authApi.query';
 
 type AuthRouteProps = { children: ReactNode };
 
 const AuthRoute = ({ children }: AuthRouteProps) => {
-  const isLogged = useAuthStore((state) => state.isLogged);
+  const { data } = useUserProfileQuery();
 
-  if (isLogged) {
+  if (data) {
     return <Navigate to="/" />;
   }
 

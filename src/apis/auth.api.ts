@@ -57,3 +57,27 @@ export const signinApi = (req: SigninApiReq) => {
 };
 
 /* End Signin api */
+
+/* Begin Profile api*/
+
+export type ProfileApiReq = BaseRequest<undefined>;
+
+export type ProfileApiResData = {
+  email: string;
+  username: string;
+  date_of_birth: number;
+  phone_number: string;
+  isVerify: boolean;
+};
+
+export type ProfileApiRes = BaseResponse<ProfileApiResData>;
+
+export const profileApi = (req: ProfileApiReq) => {
+  return axios<ProfileApiRes>({
+    url: `${prefix}/profile`,
+    method: 'GET',
+    signal: req.signal,
+  });
+};
+
+/* End Profile api*/

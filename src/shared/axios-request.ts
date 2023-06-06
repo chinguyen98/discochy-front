@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { WS_API } from '~/configs';
+import { LOCAL_STORAGE_KEY } from './constants';
 
 interface AxiosCustomConfigOptions extends AxiosRequestConfig {
   data?: Record<string, any>;
@@ -21,7 +22,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (config: InternalAxiosRequestConfig) {
-    const token = 'useAuthStore.getState().accessToken';
+    const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

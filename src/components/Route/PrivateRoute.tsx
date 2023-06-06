@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import useAuthStore from '~/stores/useAuthStore';
+import { useUserProfileQuery } from '~/queries/apis/authApi.query';
 
 type PrivateRouteProps = { children: ReactNode };
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const isLogged = useAuthStore((state) => state.isLogged);
+  const { isFetched, data } = useUserProfileQuery();
 
-  if (!isLogged) {
+  if (!data && isFetched) {
     return <Navigate to="/login" />;
   }
 
