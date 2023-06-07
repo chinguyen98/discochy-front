@@ -42,4 +42,5 @@ export const useUserProfileQuery = () =>
       return res.data;
     },
     cacheTime: 60000,
+    staleTime: Infinity,
   });

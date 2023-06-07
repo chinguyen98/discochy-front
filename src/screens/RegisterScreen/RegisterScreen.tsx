@@ -52,7 +52,7 @@ const RegisterScreen = () => {
         },
         onSuccess: () => {
           setIsLogged(true);
-          navigate('/');
+          navigate('/login');
         },
       },
     );

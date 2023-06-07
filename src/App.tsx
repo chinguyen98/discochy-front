@@ -1,10 +1,11 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { lazy, Suspense } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Route from './components/Route';
 import { IS_PROD } from './configs';
 import { queryClient } from './query-client';
-import Route from './components/Route';
+import FullPageLoading from './components/FullPageLoading/FullPageLoading';
 
 const MainScreen = lazy(() => import('./screens/MainScreen'));
 const LoginScreen = lazy(() => import('./screens/LoginScreen'));
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <Suspense fallback={<></>}>
+    <Suspense fallback={<FullPageLoading />}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         {!IS_PROD && <ReactQueryDevtools initialIsOpen={true} />}
